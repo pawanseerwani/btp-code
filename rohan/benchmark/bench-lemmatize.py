@@ -13,10 +13,10 @@ from nltk.corpus.reader.wordnet import NOUN
 wnl=nltk.stem.WordNetLemmatizer()
 
 if not DEBUG : 
-    out = open('./input/output-1-lem.csv','w') 
+    out = open('./output/bench-lem-5.csv','w') 
     writer = csv.writer(out, delimiter = '\t') 
 
-inp = open('./input/output-35.csv','r')
+inp = open('./output/bench-preprocess-5.csv','r')
 reader = csv.reader(inp)
 
 dic_noun = {}
@@ -73,6 +73,9 @@ for row in reader :
                                 row_arr[0], # username
                                 row_arr[1], # old tweet_text
                                 lem_tweet, # tokenized and lemmitized tweet
+                                row_arr[3],
+                                row_arr[4],
+                                row_arr[5],
                                 ])
 #for item in sorted(dic_noun):
 #    print(item, ' ', dic_noun[item])
@@ -82,7 +85,7 @@ list_verb=[]
 list_adv=[]
 
 if not DEBUG : 
-    out_noun = open('./input/dictionary/noun.csv','w') 
+    out_noun = open('./dictionary/noun.csv','w') 
     writer2 = csv.writer(out_noun, delimiter = '\t') 
 
     import operator
@@ -102,7 +105,7 @@ if not DEBUG :
         else:
             break
 
-    out_verb = open('./input/dictionary/verb.csv','w') 
+    out_verb = open('./dictionary/verb.csv','w') 
     writer2 = csv.writer(out_verb, delimiter = '\t') 
     sort_verb = sorted(dic_verb.iteritems(), key=operator.itemgetter(1), reverse=True)
     for item in sort_verb:
@@ -119,7 +122,7 @@ if not DEBUG :
         else:
             break
 
-    out_adj = open('./input/dictionary/adj.csv','w') 
+    out_adj = open('./dictionary/adj.csv','w') 
     writer2 = csv.writer(out_adj, delimiter = '\t') 
     sort_adj = sorted(dic_adj.iteritems(), key=operator.itemgetter(1), reverse=True)
     for item in sort_adj:
@@ -136,7 +139,7 @@ if not DEBUG :
         else:
             break
 
-    out_adv = open('./input/dictionary/adv.csv','w') 
+    out_adv = open('./dictionary/adv.csv','w') 
     writer2 = csv.writer(out_adv, delimiter = '\t') 
     sort_adv = sorted(dic_adv.iteritems(), key=operator.itemgetter(1), reverse=True)
     for item in sort_adv:
@@ -152,12 +155,3 @@ if not DEBUG :
             #list_adv.append(item)
         else:
             break
-
-
-
-
-#import pickle
-#pickle.dump(list_noun, open('./input/dictionary/noun.txt','wb'))
-#pickle.dump(list_adj, open('./input/dictionary/adj.txt','wb'))
-#pickle.dump(list_verb, open('./input/dictionary/verb.txt','wb'))
-#pickle.dump(list_adv, open('./input/dictionary/adv.txt','wb'))
