@@ -10,36 +10,40 @@ brand = ""
 product = ""
 feature = "" #TODO
 
-'''
-if(len(sys.argv) != 3) :
-    print "Error: Incorrect usage. Use %s <brand-name> <product-name>" %(sys.agrv[0]) 
+if(len(sys.argv) != 4) :
+    print "Error: Incorrect usage. Use %s <raw-html-file-name> <brand-name> <product-name>" %(sys.argv[0]) 
     sys.exit(1)
 
+input_file = sys.argv[1]
+brand = sys.argv[2]
+product = sys.argv[3]
+output_file = brand+'_'+product+'_'+input_file
 
-brand = sys.argv[1]
-product = sys.agrv[2]
-'''
 from senti_classifier import senti_classifier
 
 if not DEBUG : 
-    out = open('../5-sentiment_analyzed_tweets/1.htm.csv','w') 
+    #product wise results
+    out = open('../5-product_analysed_tweets/'+output_file+'.csv','w') 
     writer = csv.writer(out, delimiter = '\t') 
-
-inp = open('../4-lemmatized_tweets/1.htm.csv','r')
-reader = csv.reader(inp)
-
-writer.writerow(
+    writer.writerow(
                     [
-                        "Brand",
-                        "Product",
                         "Feature(s)",
+                        "tweet",
                         "sentiment",
-                        "tweet"
+                        
                     ]
                 )
 
 
+inp = open('../4-lemmatized_tweets/'+input_file+'.csv','r')
+reader = csv.reader(inp)
+
+
+
 i = 0
+count_pos = 0
+count_neg = 0
+count_neu = 0
 for row in reader : 
     i+=1
     if i == 1 :
@@ -51,7 +55,8 @@ for row in reader :
     if tweet == '':
     	continue
     tweet=[tweet]
-    pos,neg=senti_classifier.polarity_scores(tweet)
+    #pos,neg=senti_classifier.polarity_scores(tweet)
+    pos,neg = 0,0
 
     if DEBUG:
         print (pos,neg)
@@ -61,18 +66,19 @@ for row in reader :
         if pos>neg:
             #sentiment='positive'
             sentiment = 1
+            count_pos += 1
         elif pos<neg:
             #sentiment='negative'
             sentiment = -1
+            count_neg += 1
         else:
             #sentiment='neutral'
             sentiment = 0
+            count_neu += 1
         writer.writerow(
                             [
                                 #row_arr[0], # username
                                 #row_arr[1], #original tweet
-                                brand,
-                                product,
                                 feature,
                                 row_arr[2], # tweet
                                 sentiment
@@ -80,3 +86,29 @@ for row in reader :
                                 #neg, #negative score
                                 #sentiment #sentiment
                                 ])
+
+
+#this is static, do not change the output file name, all product reviews go into this file
+out_file = open('../6-brand_analysed_tweets/product_review_count.csv','a') 
+out_writer = csv.writer(out_file, delimiter = '\t') 
+
+'''
+out_writer.writerow(
+                [
+                    "Brand",
+                    "Product",
+                    "positive_count",
+                    "negative_count",
+                    "neutral_count"
+                ]
+            )
+'''
+out_writer.writerow(
+                [
+                    brand,
+                    product,
+                    count_pos,
+                    count_neg,
+                    count_neu
+                ]
+            )

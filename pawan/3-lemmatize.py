@@ -6,6 +6,13 @@ thresh_verb=0
 thresh_adj=0
 thresh_adv=0
 
+import sys
+if(len(sys.argv) != 2) :
+    print "Error: Incorrect usage. Use %s <raw-html-file-name>" %(sys.argv[0]) 
+    sys.exit(1)
+
+input_file = sys.argv[1]
+
 import csv
 import nltk
 from nltk.corpus.reader.wordnet import VERB
@@ -15,19 +22,28 @@ from nltk.corpus.reader.wordnet import NOUN
 wnl=nltk.stem.WordNetLemmatizer()
 
 if not DEBUG : 
-    out = open('../4-lemmatized_tweets/1.htm.csv','w') 
+    out = open('../4-lemmatized_tweets/'+input_file+'.csv','w') 
     writer = csv.writer(out, delimiter = '\t') 
 
-inp = open('../3-preprocessed_tweets/1.htm.csv','r')
+inp = open('../3-preprocessed_tweets/'+input_file+'.csv','r')
 reader = csv.reader(inp)
 
 dic_noun = {}
 dic_verb = {}
 dic_adj = {}
 dic_adv  = {}
-
+if not DEBUG :
+    writer.writerow([
+                    'username', 
+                    'old_tweet', 
+                    'lemmatized_tweet',
+                    ])
 i=0
 for row in reader : 
+    i += 1
+    if i == 1 :
+        continue
+
     row_str = str(row)[2:-2] #convert the row to string ignoring the square brackets and single quote
     row_arr = row_str.split('\\t') # split the string with tab delimiter
     tweet = row_arr[2] # 3 is the index of tweet text

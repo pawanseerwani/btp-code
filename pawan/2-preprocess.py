@@ -4,10 +4,18 @@ DEBUG = 0
 
 import csv
 import re
-inp = open('../2-extracted_tweets/1.htm.csv','r')
+
+import sys
+if(len(sys.argv) != 2) :
+    print "Error: Incorrect usage. Use %s <raw-html-file-name>" %(sys.argv[0]) 
+    sys.exit(1)
+
+input_file = sys.argv[1]
+
+inp = open('../2-extracted_tweets/'+input_file+'.csv','r')
 
 if not DEBUG : 
- out = open('../3-preprocessed_tweets/1.htm.csv','w') 
+ out = open('../3-preprocessed_tweets/'+input_file+'.csv','w') 
  writer = csv.writer(out, delimiter = '\t') 
 
 reader = csv.reader(inp)
@@ -27,7 +35,6 @@ for row in reader :
 
     
     try :
-        print row[0]
         row_arr = row[0].split('\t') # split the string with tab delimiter
         username = row_arr[0]
         tweet = row_arr[1]
@@ -35,9 +42,6 @@ for row in reader :
         tweet = [ tweet[i] for i in range(len(tweet)) if tweet[i].isalnum() or tweet[i] == ' ' ]
         username = ''.join(username)
         tweet = ''.join(tweet)
-
-        print username
-        print tweet
 
         #row_arr[1] = u' '.join(row_arr[1]).encode('utf-8').strip()
         #row_arr[1] = row_arr[1].decode('UTF-8')
@@ -73,20 +77,20 @@ for row in reader :
             raw_input()
         else : 
             #Write to a new csv
-            writer.writerow(
-                            [
-                                row_arr[0], # username
-                                row_arr[1], # old tweet_text
-                                tweet_text, # pre processed tweet_text
-                            #TODO : join the hash_arr with ,
-                                ','.join(hash_arr),    # hashtags in text
-                                exc_count
+                writer.writerow(
+                                [
+                                    row_arr[0], # username
+                                    row_arr[1], # old tweet_text
+                                    tweet_text, # pre processed tweet_text
+                                #TODO : join the hash_arr with ,
+                                    ','.join(hash_arr),    # hashtags in text
+                                    exc_count
 
-                                ])
+                                    ])
     except Exception as e:
-        print "error:"+str(e)
+        if DEBUG :
+            print "error:"+str(e)
 
-    print '\n'
         
             
 
