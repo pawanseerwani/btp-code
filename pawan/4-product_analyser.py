@@ -35,8 +35,8 @@ if not DEBUG :
                 )
 
 
-inp = open('../4-lemmatized_tweets/'+input_file+'.csv','r')
-reader = csv.reader(inp)
+inp = open('../4-lemmatized_tweets/'+input_file+'.csv','rU')
+reader = csv.reader(inp,dialect=csv.excel_tab)
 
 
 
@@ -49,14 +49,16 @@ for row in reader :
     if i == 1 :
         continue
 
-    row_str = str(row)[2:-2] #convert the row to string ignoring the square brackets and single quote
-    row_arr = row_str.split('\\t') # split the string with tab delimiter
-    tweet = row_arr[2] # 2 is the index of tweet text
+    #row_str = str(row)[2:-2] #convert the row to string ignoring the square brackets and single quote
+    #row_arr = row_str.split('\\t') # split the string with tab delimiter
+    #tweet = row_arr[2] # 2 is the index of tweet text
+    row_arr = row
+    tweet = row[1]
     if tweet == '':
     	continue
     tweet=[tweet]
-    #pos,neg=senti_classifier.polarity_scores(tweet)
-    pos,neg = 0,0
+    pos,neg=senti_classifier.polarity_scores(tweet)
+    #pos,neg = 0,0
 
     if DEBUG:
         print (pos,neg)
@@ -80,7 +82,7 @@ for row in reader :
                                 #row_arr[0], # username
                                 #row_arr[1], #original tweet
                                 feature,
-                                row_arr[2], # tweet
+                                row[1], # tweet
                                 sentiment
                                 #pos, #positive score
                                 #neg, #negative score

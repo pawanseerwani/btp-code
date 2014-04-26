@@ -11,16 +11,13 @@ if(len(sys.argv) != 2) :
     sys.exit(1)
 
 input_file = sys.argv[1]
-
-inp = open('../2-extracted_tweets/'+input_file+'.csv','r')
+inp = open('../2-extracted_tweets/'+input_file+'.csv','rU')
+reader = csv.reader(inp,dialect=csv.excel_tab)
 
 if not DEBUG : 
  out = open('../3-preprocessed_tweets/'+input_file+'.csv','w') 
  writer = csv.writer(out, delimiter = '\t') 
-
-reader = csv.reader(inp)
-if not DEBUG :
-    writer.writerow([
+ writer.writerow([
                     'username', 
                     'old_tweet', 
                     'pre_processed_tweet',
@@ -28,21 +25,23 @@ if not DEBUG :
                     'exclamation count'
                     ])
 i=0
-for row in reader : 
-    if i == 0 :
-        i += 1
+for row in reader :
+    #print i
+    i += 1
+    if i == 1 :
         continue
-
+    #print row[0], row[1]
+    #break
     
     try :
-        row_arr = row[0].split('\t') # split the string with tab delimiter
-        username = row_arr[0]
-        tweet = row_arr[1]
-        username = [ username[i] for i in range(len(username)) if username[i].isalnum() or username[i] == ' ' ]
-        tweet = [ tweet[i] for i in range(len(tweet)) if tweet[i].isalnum() or tweet[i] == ' ' ]
-        username = ''.join(username)
-        tweet = ''.join(tweet)
 
+        #row_arr = row[0].split('\t') # split the string with tab delimiter
+        row_arr = row
+        username = row[0]
+        tweet = row[1]
+        
+
+        #print username, tweet
         #row_arr[1] = u' '.join(row_arr[1]).encode('utf-8').strip()
         #row_arr[1] = row_arr[1].decode('UTF-8')
         tweet_text = tweet
@@ -65,11 +64,16 @@ for row in reader :
         tweet_text = re.sub(' +', ' ', tweet_text) # replace multiple spaces with single space
         tweet_text = tweet_text.strip() # strips leading and trailingspaces
         
+        username = [ username[i] for i in range(len(username)) if username[i].isalnum() or username[i] == ' ' ]
+        tweet_text = [ tweet_text[i] for i in range(len(tweet_text)) if tweet_text[i].isalnum() or tweet_text[i] == ' ' ]
+
+        username = ''.join(username)
+        tweet_text = ''.join(tweet_text)
         #for i in len(tweet_text) :
 
         if DEBUG :
             #print row_arr[0]
-            print row_arr[1]
+            #print row_arr[1]
             print tweet_text
             #print ','.join(hash_arr)
             #print exc_count
@@ -88,8 +92,9 @@ for row in reader :
 
                                     ])
     except Exception as e:
-        if DEBUG :
-            print "error:"+str(e)
+        #if DEBUG :
+        print "error:"+str(e)
+        exit
 
         
             

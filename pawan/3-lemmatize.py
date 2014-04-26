@@ -25,8 +25,8 @@ if not DEBUG :
     out = open('../4-lemmatized_tweets/'+input_file+'.csv','w') 
     writer = csv.writer(out, delimiter = '\t') 
 
-inp = open('../3-preprocessed_tweets/'+input_file+'.csv','r')
-reader = csv.reader(inp)
+inp = open('../3-preprocessed_tweets/'+input_file+'.csv','rU')
+reader = csv.reader(inp,dialect=csv.excel_tab)
 
 dic_noun = {}
 dic_verb = {}
@@ -44,8 +44,9 @@ for row in reader :
     if i == 1 :
         continue
 
-    row_str = str(row)[2:-2] #convert the row to string ignoring the square brackets and single quote
-    row_arr = row_str.split('\\t') # split the string with tab delimiter
+    row_arr = row
+    #row_str = str(row)[2:-2] #convert the row to string ignoring the square brackets and single quote
+    #row_arr = row_str.split('\\t') # split the string with tab delimiter
     tweet = row_arr[2] # 3 is the index of tweet text
     if tweet == '':
     	continue
