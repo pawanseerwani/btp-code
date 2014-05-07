@@ -8,7 +8,7 @@ thresh_adv=0
 
 import sys
 if(len(sys.argv) != 2) :
-    print "Error: Incorrect usage. Use %s <raw-html-file-name>" %(sys.argv[0]) 
+    print "Error: Incorrect usage. Use %s <pre-processed-tweets-file-name>" %(sys.argv[0]) 
     sys.exit(1)
 
 input_file = sys.argv[1]
@@ -21,12 +21,13 @@ from nltk.corpus.reader.wordnet import ADV
 from nltk.corpus.reader.wordnet import NOUN
 wnl=nltk.stem.WordNetLemmatizer()
 
+inp = open('../3-preprocessed_tweets/'+input_file+'.csv','rU')
+reader = csv.reader(inp,dialect=csv.excel_tab)
+
 if not DEBUG : 
     out = open('../4-lemmatized_tweets/'+input_file+'.csv','w') 
     writer = csv.writer(out, delimiter = '\t') 
 
-inp = open('../3-preprocessed_tweets/'+input_file+'.csv','rU')
-reader = csv.reader(inp,dialect=csv.excel_tab)
 
 dic_noun = {}
 dic_verb = {}

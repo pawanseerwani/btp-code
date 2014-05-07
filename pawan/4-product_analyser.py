@@ -3,23 +3,21 @@ DEBUG = 0
 
 import csv
 import sys
+from senti_classifier import senti_classifier
 
-allowed_brands = ["apple", "samsung", "ms", "sony", "nike", "adidas"]
-allowed_products = [] #TODO
 brand = ""
 product = ""
 feature = "" #TODO
 
 if(len(sys.argv) != 4) :
-    print "Error: Incorrect usage. Use %s <raw-html-file-name> <brand-name> <product-name>" %(sys.argv[0]) 
+    print "Error: Incorrect usage. Use %s <lemmatized-tweets-file-name> <brand-name> <product-name>" %(sys.argv[0]) 
     sys.exit(1)
 
 input_file = sys.argv[1]
 brand = sys.argv[2]
 product = sys.argv[3]
-output_file = brand+'_'+product+'_'+input_file
+output_file = brand+'_'+product
 
-from senti_classifier import senti_classifier
 
 if not DEBUG : 
     #product wise results
@@ -27,7 +25,6 @@ if not DEBUG :
     writer = csv.writer(out, delimiter = '\t') 
     writer.writerow(
                     [
-                        "Feature(s)",
                         "tweet",
                         "sentiment",
                         
@@ -81,7 +78,6 @@ for row in reader :
                             [
                                 #row_arr[0], # username
                                 #row_arr[1], #original tweet
-                                feature,
                                 row[1], # tweet
                                 sentiment
                                 #pos, #positive score

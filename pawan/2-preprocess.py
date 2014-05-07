@@ -7,7 +7,7 @@ import re
 
 import sys
 if(len(sys.argv) != 2) :
-    print "Error: Incorrect usage. Use %s <raw-html-file-name>" %(sys.argv[0]) 
+    print "Error: Incorrect usage. Use %s <extracted-tweets-file-name>" %(sys.argv[0]) 
     sys.exit(1)
 
 input_file = sys.argv[1]
@@ -26,13 +26,9 @@ if not DEBUG :
                     ])
 i=0
 for row in reader :
-    #print i
     i += 1
     if i == 1 :
         continue
-    #print row[0], row[1]
-    #break
-    
     try :
 
         #row_arr = row[0].split('\t') # split the string with tab delimiter
@@ -42,10 +38,7 @@ for row in reader :
         
 
         #print username, tweet
-        #row_arr[1] = u' '.join(row_arr[1]).encode('utf-8').strip()
-        #row_arr[1] = row_arr[1].decode('UTF-8')
         tweet_text = tweet
-        #tweet_text = tweet_text.encode('ascii', 'ignore')
         tweet_text = re.sub('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '' , tweet_text) # removes urls
         tweet_text = re.sub('pic\.twitter\.com[^ ]*', '', tweet_text ) # removes urls
         tweet_text = re.sub('@[^ ]*', '', tweet_text) # remove usernames
@@ -69,14 +62,9 @@ for row in reader :
 
         username = ''.join(username)
         tweet_text = ''.join(tweet_text)
-        #for i in len(tweet_text) :
 
         if DEBUG :
-            #print row_arr[0]
-            #print row_arr[1]
             print tweet_text
-            #print ','.join(hash_arr)
-            #print exc_count
             print '\n'
             raw_input()
         else : 
@@ -86,7 +74,6 @@ for row in reader :
                                     row_arr[0], # username
                                     row_arr[1], # old tweet_text
                                     tweet_text, # pre processed tweet_text
-                                #TODO : join the hash_arr with ,
                                     ','.join(hash_arr),    # hashtags in text
                                     exc_count
 
