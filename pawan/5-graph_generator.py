@@ -3,9 +3,11 @@ import csv
 import re
 
 import sys
-if(len(sys.argv) != 1) :
-    print "Error: Incorrect usage. Use %s " %(sys.argv[0]) 
+if(len(sys.argv) != 2) :
+    print "Error: Incorrect usage. Use %s <output-filename>" %(sys.argv[0]) 
     sys.exit(1)
+
+output = sys.argv[1] + ".png"
 
 inp = open('../6-brand_analysed_tweets/product_review_count.csv','rU')
 reader = csv.reader(inp,dialect=csv.excel_tab)
@@ -19,7 +21,8 @@ negative = int(last_row[3])
 neutral = int(last_row[4])
 
 total = positive + negative + neutral
-
+if(total == 0) :
+    sys.exit("Error: No data for graph generation")
 pos_frac = int(positive*100 /total)
 neg_frac = int(negative*100/total)
 neu_frac = 100 - (pos_frac + neg_frac)
@@ -42,4 +45,4 @@ pie(fracs, explode=explode, labels=labels,
 
 title(product + ' (' + brand + ')', bbox={'facecolor':'0.8', 'pad':5})
 
-show()
+savefig('../7-graphs/'+output)

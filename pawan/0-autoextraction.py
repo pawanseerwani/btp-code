@@ -18,7 +18,7 @@ limit = limit if limit < 100 else 100
 twitter_api = oauth_login()
 twitter_rest = twitter.Twitter(auth=twitter_api.auth)
 #stream = twitter_stream.statuses.filter(track=search_term,language='en')
-rest = twitter_rest.search.tweets(q=search_term)
+rest = twitter_rest.search.tweets(q=search_term, lang='en')
 
 if not DEBUG : 
  out = open('../2-extracted_tweets/'+input_file+'.csv','w') 
@@ -40,9 +40,9 @@ for tweet in rest['statuses']:
     tweet_text =  demo_text
     timestamp =  tweet['created_at']
 
-    #if prev_tweet == tweet_text :
-    #    i -= 1
-    #    continue
+    if prev_tweet == tweet_text :
+        i -= 1
+        continue
     if DEBUG : 
       print username, tweet_text, timestamp
     else :

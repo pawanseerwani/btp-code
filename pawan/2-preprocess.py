@@ -48,8 +48,8 @@ for row in reader :
         exc_count = tweet_text.count('!')
 
         #remove hash tags at the end
-        hash_split = tweet_text.split('#')
-        tweet_text = '#'.join([ word for word in hash_split if word.count(' ') > 1 ] )
+        #hash_split = tweet_text.split('#')
+        #tweet_text = '#'.join([ word for word in hash_split if word.count(' ') > 1 ] )
         #tweet_text = re.sub('\x..','',tweet_text) # remove encoding chars like \x23 \xd3
         tweet_text = re.sub('[^A-Za-z0-9 \$\.,-]', '' , tweet_text)    # removes spl chars
         tweet_text = re.sub('-', ' ' , tweet_text)    # removes spl chars

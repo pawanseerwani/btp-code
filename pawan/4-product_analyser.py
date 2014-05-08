@@ -27,7 +27,7 @@ if not DEBUG :
                     [
                         "tweet",
                         "sentiment",
-                        
+                        "original_tweet"                        
                     ]
                 )
 
@@ -41,6 +41,9 @@ i = 0
 count_pos = 0
 count_neg = 0
 count_neu = 0
+
+prev_tweet=''
+
 for row in reader : 
     i+=1
     if i == 1 :
@@ -50,9 +53,10 @@ for row in reader :
     #row_arr = row_str.split('\\t') # split the string with tab delimiter
     #tweet = row_arr[2] # 2 is the index of tweet text
     row_arr = row
-    tweet = row[1]
-    if tweet == '':
+    tweet = row[2]
+    if tweet == '' or tweet == prev_tweet:
     	continue
+    prev_tweet = tweet
     tweet=[tweet]
     pos,neg=senti_classifier.polarity_scores(tweet)
     #pos,neg = 0,0
@@ -78,8 +82,9 @@ for row in reader :
                             [
                                 #row_arr[0], # username
                                 #row_arr[1], #original tweet
-                                row[1], # tweet
-                                sentiment
+                                row[2], # tweet
+                                sentiment,
+                                row[1], #original_tweet
                                 #pos, #positive score
                                 #neg, #negative score
                                 #sentiment #sentiment
